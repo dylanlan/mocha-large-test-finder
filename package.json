@@ -4,6 +4,7 @@
   "description": "Package to find the largest mocha tests in a repo",
   "main": "index.js",
   "scripts": {
+    "start": "node ./index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
