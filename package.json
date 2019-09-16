@@ -16,6 +16,7 @@
   "author": "Dylan Stankievech",
   "license": "ISC",
   "dependencies": {
-    "lodash": "~4.17.15"
+    "lodash": "~4.17.15",
+    "minimist": "~1.2.0"
   }
 }
