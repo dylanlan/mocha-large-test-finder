@@ -2,7 +2,10 @@
 
 const fs = require('fs');
 const path = require('path');
+const argv = require('minimist')(process.argv.slice(2));
 const _ = require('lodash');
+
+const lineCountToFilter = argv.lines || 20;
 
 const isTestFile = (fileName) => {
     return fileName && fileName.endsWith('.test.js') || fileName.endsWith('.spec.js');
@@ -91,6 +94,8 @@ allTestFiles.forEach(file => {
     findLargeTests(file);
 });
 
-const sorted = _.fromPairs(_.sortBy(_.toPairs(lengths), 1).reverse());
+const testsWithManyLines = _.toPairs(lengths).filter(pair => pair[1] >= lineCountToFilter);
+const sorted = _.fromPairs(_.sortBy(testsWithManyLines, 1).reverse());
 
+console.log(`Tests with approx number of lines greater than ${lineCountToFilter}:`);
 console.log(sorted);
