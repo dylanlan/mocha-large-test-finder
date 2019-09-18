@@ -14,13 +14,13 @@ const isTestFile = (fileName) => {
 };
 
 const isDirectory = (path) => {
-    return fs.existsSync(path) && fs.lstatSync(path).isDirectory() && !path.startsWith('.');
-}
+    return fs.existsSync(path) && fs.lstatSync(path).isDirectory();
+};
 
 const getTestFiles = (directory) => {
     const files = fs.readdirSync(directory);
     let testFiles = files.filter(f => isTestFile(f)).map(f => path.join(directory, f));
-    const directories = files.filter(f => isDirectory(f));
+    const directories = files.filter(f => isDirectory(f) && !f.startsWith('.'));
     directories.forEach(dir => {
         const subFiles = getTestFiles(dir);
         testFiles = testFiles.concat(subFiles);
@@ -37,7 +37,7 @@ const isTestLine = (line) => {
 const isTestBlock = (line) => {
     const regex = /^\s*(it|describe|beforeEach|afterEach)\(/;
     return regex.test(line);
-}
+};
 
 const lengths = {};
 const findLargeTests = (testFile) => {
@@ -58,7 +58,7 @@ const findLargeTests = (testFile) => {
     for (let i = 0; i < numLines; i++) {
         const line = lines[i];
         const lineNumber = i + 1;
-        fileLine = `${line} - ${testFile}:${lineNumber}`.trim();
+        fileLine = `${testFile}:${lineNumber} - ${line.trim()}`.trim();
         const isTest = isTestLine(line);
         const isBlock = isTestBlock(line);
 
@@ -90,6 +90,11 @@ const findLargeTests = (testFile) => {
     }
 };
 
+if (!isDirectory(dir)) {
+    console.error(`${dir} is not a directory`);
+    process.exit(1);
+}
+
 const allTestFiles = getTestFiles(dir);
 
 allTestFiles.forEach(file => {
@@ -97,7 +102,9 @@ allTestFiles.forEach(file => {
 });
 
 const testsWithManyLines = _.toPairs(lengths).filter(pair => pair[1] >= lineCountToFilter).slice(0, topTests);
-const sorted = _.fromPairs(_.sortBy(testsWithManyLines, 1).reverse());
+const sorted = _.sortBy(testsWithManyLines, 1).reverse();
 
-console.log(`Tests with approx number of lines greater than ${lineCountToFilter}:`);
-console.log(sorted);
+console.log(`Top ${topTests} tests with approx number of lines greater than ${lineCountToFilter} in directory ${dir}:`);
+sorted.forEach(test => {
+    console.log(`${test[0]}, line count: ${test[1]}`);
+});
