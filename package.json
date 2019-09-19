@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "description": "Package to find the largest mocha tests in a repo",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Dylanlan/mocha-large-test-finder.git"
+  },
   "scripts": {
     "start": "node ./index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
