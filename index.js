@@ -10,7 +10,7 @@ const topTests = argv.top || 50;
 const dir = argv.dir || '.';
 
 const isTestFile = (fileName) => {
-    return fileName && fileName.endsWith('.test.js') || fileName.endsWith('.spec.js');
+    return fileName && fileName.toLowerCase().endsWith('test.js') || fileName.toLowerCase().endsWith('spec.js');
 };
 
 const isDirectory = (path) => {
