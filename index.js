@@ -101,10 +101,13 @@ allTestFiles.forEach(file => {
     findLargeTests(file);
 });
 
-const testsWithManyLines = _.toPairs(lengths).filter(pair => pair[1] >= lineCountToFilter).slice(0, topTests);
-const sorted = _.sortBy(testsWithManyLines, 1).reverse();
+const testsWithManyLines = _.toPairs(lengths).filter(pair => pair[1] >= lineCountToFilter);
+const topLargeTests = testsWithManyLines.slice(0, topTests);
+const sorted = _.sortBy(topLargeTests, 1).reverse();
 
 console.log(`Top ${topTests} tests with approx number of lines greater than ${lineCountToFilter} in directory ${dir}:`);
 sorted.forEach(test => {
     console.log(`${test[0]}, line count: ${test[1]}`);
 });
+
+console.log(`Total number of large tests: ${testsWithManyLines.length}`);
