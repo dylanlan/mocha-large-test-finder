@@ -30,6 +30,6 @@ npm run start -- --top=5 --lines=15 --dir=/some/test/directory
 Note that line counts will only be approximate, not exact, since it only uses a heuristic rather than parsing.
 
 TODO:
-* accept directory parameter
+* move logic to separate file
 * add some tests
 * test on various repos
