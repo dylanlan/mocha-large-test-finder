@@ -8,7 +8,7 @@
     "url": "https://github.com/Dylanlan/mocha-large-test-finder.git"
   },
   "bin": {
-    "find-large-tests": "./cli.js"
+    "large-test-finder": "./cli.js"
   },
   "scripts": {
     "start": "node ./cli.js",
