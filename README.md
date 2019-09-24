@@ -11,25 +11,30 @@ It searches for .test.js or .spec.js files, and looks at the number of lines in 
 
 It then outputs the tests above a certain line count threshold.
 
+Usage:
+```
+npm install -g mocha-large-test-finder
+large-test-finder --dir=/some/test/directory
+```
+
 Options:
 ```
---lines: find tests that are above this number of lines (default 20)
 --dir: look for tests in this directory (default .)
+--lines: find tests that are above this number of lines (default 20)
 --top: output the top N tests sorted by number of lines (default 50)
 ```
 
-Example:
+Examples:
 ```
 # Find tests greater than 10 lines
-node index.js --lines=10
+large-test-finder --lines=10
 
 # Find 5 largest tests greater than 15 lines, in /some/test/directory, 
-npm run start -- --top=5 --lines=15 --dir=/some/test/directory
+large-test-finder --top=5 --lines=15 --dir=/some/test/directory
 ```
 
-Note that line counts will only be approximate, not exact, since it only uses a heuristic rather than parsing.
+Note that line counts will only be approximate, not exact, since it only uses a heuristic for counting lines rather than parsing.
 
 TODO:
-* move logic to separate file
 * add some tests
 * test on various repos
