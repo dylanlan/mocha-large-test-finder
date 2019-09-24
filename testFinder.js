@@ -2,12 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const argv = require('minimist')(process.argv.slice(2));
 const _ = require('lodash');
-
-const lineCountToFilter = argv.lines || 20;
-const topTests = argv.top || 50;
-const dir = argv.dir || '.';
 
 const isTestFile = (fileName) => {
     return fileName && fileName.toLowerCase().endsWith('test.js') || fileName.toLowerCase().endsWith('spec.js');
@@ -39,8 +34,7 @@ const isTestBlock = (line) => {
     return regex.test(line);
 };
 
-const lengths = {};
-const findLargeTests = (testFile) => {
+const findLargeTests = (testFile, lengths) => {
     const testText = fs.readFileSync(testFile).toString();
     if (!testText) {
         return;
@@ -90,24 +84,39 @@ const findLargeTests = (testFile) => {
     }
 };
 
-if (!isDirectory(dir)) {
-    console.error(`${dir} is not a directory`);
-    process.exit(1);
+const validateInputs = (dir, lines, numTests) => {
+    if (!isDirectory(dir)) {
+        console.error(`${dir} is not a directory`);
+        process.exit(1);
+    }
+
+    if (lines < 0) {
+        console.error(`Number of lines (${lines}) cannot be negative`);
+        process.exit(1);
+    }
+
+    if (numTests < 0) {
+        console.error(`Number of tests (${numTests}) cannot be negative`);
+        process.exit(1);
+    }
 }
 
-const allTestFiles = getTestFiles(dir);
+exports.getLargeTests = (dir, lines, numTests) => {
+    validateInputs(dir, lines, numTests);
 
-allTestFiles.forEach(file => {
-    findLargeTests(file);
-});
+    const allTestFiles = getTestFiles(dir);
 
-const testsWithManyLines = _.toPairs(lengths).filter(pair => pair[1] >= lineCountToFilter);
-const topLargeTests = testsWithManyLines.slice(0, topTests);
-const sorted = _.sortBy(topLargeTests, 1).reverse();
+    const lengths = {};
+    allTestFiles.forEach(file => {
+        findLargeTests(file, lengths);
+    });
+    
+    const testsWithManyLines = _.toPairs(lengths).filter(pair => pair[1] >= lines);
+    const topLargeTests = testsWithManyLines.slice(0, numTests);
+    const sorted = _.sortBy(topLargeTests, 1).reverse();
 
-console.log(`Top ${topTests} tests with approx number of lines greater than ${lineCountToFilter} in directory ${dir}:`);
-sorted.forEach(test => {
-    console.log(`${test[0]}, line count: ${test[1]}`);
-});
-
-console.log(`Total number of large tests: ${testsWithManyLines.length}`);
+    return {
+        largeTests: sorted,
+        numTotalTests: testsWithManyLines.length
+    };
+};
