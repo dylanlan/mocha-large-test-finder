@@ -3,10 +3,7 @@
   "version": "0.0.3",
   "description": "Package to find the largest mocha tests in a repo",
   "main": "cli.js",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Dylanlan/mocha-large-test-finder.git"
-  },
+  "repository": "https://github.com/Dylanlan/mocha-large-test-finder",
   "bin": {
     "large-test-finder": "./cli.js"
   },
