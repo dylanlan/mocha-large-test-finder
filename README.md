@@ -1,5 +1,7 @@
-Mocha Large Test Finder
+[DEPRECATED] Mocha Large Test Finder
 ==================
+
+This project has been deprecated in favour of: https://github.com/Dylanlan/mocha-bad-test-finder
 
 Wanting to refactor some tests to be smaller or simpler? But don't know where to start?
 
