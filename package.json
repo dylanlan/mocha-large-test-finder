@@ -1,6 +1,6 @@
 {
   "name": "mocha-large-test-finder",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Package to find the largest mocha tests in a repo",
   "main": "cli.js",
   "repository": "https://github.com/Dylanlan/mocha-large-test-finder",
